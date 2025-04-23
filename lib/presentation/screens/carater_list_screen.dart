@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod/flutter_riverpod.dart';
 import 'package:explorer_app/presentation/providers/character_provider.dart';
 import 'package:explorer_app/presentation/screens/character_detail_screen.dart';
 import 'package:explorer_app/presentation/widgets/character_card.dart';

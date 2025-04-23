@@ -1,8 +1,7 @@
 import 'package:explorer/data/models/caracter_model.dart';
 import 'package:flutter/material.dart';
-
 class CharacterDetailScreen extends StatelessWidget {
-  final Character character;
+  final CharacterModel character;
 
   const CharacterDetailScreen({super.key, required this.character});
 

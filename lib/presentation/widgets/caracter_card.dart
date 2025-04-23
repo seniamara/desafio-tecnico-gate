@@ -2,7 +2,7 @@ import 'package:explorer/data/models/caracter_model.dart';
 import 'package:flutter/material.dart';
 
 class CharacterCard extends StatelessWidget {
-  final Character character;
+  final CharacterModel character;
   final VoidCallback onTap;
 
   const CharacterCard({super.key, required this.character, required this.onTap});
