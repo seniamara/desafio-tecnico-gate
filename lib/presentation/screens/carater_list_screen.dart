@@ -1,9 +1,9 @@
 import 'dart:async';
+import 'package:explorer/presentation/providers/caracter_provider.dart';
+import 'package:explorer/presentation/screens/caracter_detalhes_screen.dart';
+import 'package:explorer/presentation/widgets/caracter_card.dart';
 import 'package:flutter/material.dart';
-import 'package:riverpod/flutter_riverpod.dart';
-import 'package:explorer_app/presentation/providers/character_provider.dart';
-import 'package:explorer_app/presentation/screens/character_detail_screen.dart';
-import 'package:explorer_app/presentation/widgets/character_card.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CharacterListScreen extends ConsumerStatefulWidget {
   const CharacterListScreen({super.key});
