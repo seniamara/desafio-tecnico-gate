@@ -19,6 +19,7 @@ class _CharacterListScreenState extends ConsumerState<CharacterListScreen> with 
   Timer? _debounce;
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
+  bool _showDropdown = false;
 
   @override
   void initState() {
@@ -56,6 +57,10 @@ class _CharacterListScreenState extends ConsumerState<CharacterListScreen> with 
     });
   }
 
+  void _toggleDropdown() {
+    setState(() => _showDropdown = !_showDropdown);
+  }
+
   @override
   Widget build(BuildContext context) {
     final charactersState = ref.watch(characterProvider);
@@ -65,14 +70,7 @@ class _CharacterListScreenState extends ConsumerState<CharacterListScreen> with 
       backgroundColor: Colors.white,
       appBar: AppBar(
         leading: const Icon(Icons.explore, color: Colors.green),
-        title: const Text(
-          'ExplorerApp',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-        ),
+        title: const Text('ExplorerApp', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20)),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
@@ -80,49 +78,34 @@ class _CharacterListScreenState extends ConsumerState<CharacterListScreen> with 
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                Card(
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: TextField(
-                      controller: _nameController,
-                      decoration: InputDecoration(
-                        labelText: 'Pesquisar por nome',
-                        floatingLabelAlignment: FloatingLabelAlignment.center,
-                        prefixIcon: const Icon(Icons.search, color: Colors.green),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        filled: true,
-                        fillColor: const Color(0xFFF1F0F0),
-                      ),
-                      onChanged: _onSearchChanged,
+                TextField(
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                    labelText: _showDropdown ? null : 'Pesquisar por nome',
+                    prefixIcon: const Icon(Icons.search, color: Color(0xFFA0A0A0)),
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.filter_list, color: Color(0xFFA0A0A0)),
+                      onPressed: _toggleDropdown,
+                    ),
+                    filled: true,
+                    fillColor: const Color(0xFFFCF6F6),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(color: _showDropdown ? Colors.black : Colors.transparent),
                     ),
                   ),
+                  onChanged: _onSearchChanged,
                 ),
-                const SizedBox(height: 12),
-                Card(
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                if (_showDropdown)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
                     child: DropdownButtonFormField<String>(
                       value: _selectedStatus,
-                      decoration: InputDecoration(
-                        labelText: 'Filtrar por status',
-                        floatingLabelAlignment: FloatingLabelAlignment.center,
-                        border: InputBorder.none,
-                        icon: const Icon(Icons.filter_list, color: Colors.green),
-                      ),
-                      items: [
+                      decoration: const InputDecoration.collapsed(hintText: ''),
+                      items: const [
                         DropdownMenuItem(value: 'Alive', child: Text('Vivo')),
                         DropdownMenuItem(value: 'Dead', child: Text('Morto')),
                         DropdownMenuItem(value: 'unknown', child: Text('Desconhecido')),
@@ -131,10 +114,8 @@ class _CharacterListScreenState extends ConsumerState<CharacterListScreen> with 
                         setState(() => _selectedStatus = value);
                         notifier.applyFilters(_nameController.text, value);
                       },
-                      style: const TextStyle(color: Colors.black, fontSize: 16),
                     ),
                   ),
-                ),
               ],
             ),
           ),
@@ -157,14 +138,9 @@ class _CharacterListScreenState extends ConsumerState<CharacterListScreen> with 
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                            ),
+                            const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.green)),
                             const SizedBox(width: 12),
-                            Text(
-                              'Carregando mais personagens...',
-                              style: TextStyle(color: Colors.grey[600], fontSize: 14),
-                            ),
+                            Text('Carregando mais personagens...', style: TextStyle(color: Colors.grey[600], fontSize: 14)),
                           ],
                         ),
                       ),
@@ -188,13 +164,8 @@ class _CharacterListScreenState extends ConsumerState<CharacterListScreen> with 
               loading: () => Center(
                 child: Container(
                   padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                  ),
+                  decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(12)),
+                  child: const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.green)),
                 ),
               ),
               error: (error, _) => Center(
@@ -204,54 +175,28 @@ class _CharacterListScreenState extends ConsumerState<CharacterListScreen> with 
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Card(
                       color: Colors.white,
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                     // elevation: 4,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       child: Padding(
                         padding: const EdgeInsets.all(24.0),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(
-                              Icons.error_outline,
-                              color: Colors.red,
-                              size: 48,
-                            ),
+                            const Icon(Icons.error_outline, color: Colors.red, size: 48),
                             const SizedBox(height: 16),
-                            Text(
-                              'Erro: $error',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey[800],
-                                fontWeight: FontWeight.w500,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
+                            Text('Erro: $error', style: TextStyle(fontSize: 16, color: Colors.grey[800], fontWeight: FontWeight.w500), textAlign: TextAlign.center),
                             const SizedBox(height: 8),
-                            Text(
-                              'Verifique sua conexão e tente novamente.',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey[600],
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
+                            Text('Verifique sua conexão e tente novamente.', style: TextStyle(fontSize: 14, color: Colors.grey[600]), textAlign: TextAlign.center),
                             const SizedBox(height: 16),
                             ElevatedButton.icon(
                               onPressed: () => notifier.loadCharacters(reset: true),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.green[600],
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                               ),
                               icon: const Icon(Icons.refresh, color: Colors.white, size: 20),
-                              label: const Text(
-                                'Tentar Novamente',
-                                style: TextStyle(color: Colors.white, fontSize: 16),
-                              ),
+                              label: const Text('Tentar Novamente', style: TextStyle(color: Colors.white, fontSize: 16)),
                             ),
                           ],
                         ),

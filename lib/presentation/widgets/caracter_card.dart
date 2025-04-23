@@ -10,6 +10,7 @@ class CharacterCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color:Colors.white,
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: ListTile(
         leading: Image.network(character.image, width: 50, height: 50, fit: BoxFit.cover),

@@ -1,10 +1,21 @@
 import 'package:explorer/data/models/caracter_model.dart';
 import 'package:flutter/material.dart';
 
-class CharacterDetailScreen extends StatelessWidget {
+class CharacterDetailScreen extends StatefulWidget {
   final CharacterModel character;
 
   const CharacterDetailScreen({super.key, required this.character});
+
+  @override
+  State<CharacterDetailScreen> createState() => _CharacterDetailScreenState();
+}
+
+class _CharacterDetailScreenState extends State<CharacterDetailScreen> {
+  bool _isFavorite = false;
+
+  void _toggleFavorite() {
+    setState(() => _isFavorite = !_isFavorite);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +27,7 @@ class CharacterDetailScreen extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          character.name,
+          widget.character.name,
           style: const TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -59,17 +70,18 @@ class CharacterDetailScreen extends StatelessWidget {
                       Align(
                         alignment: Alignment.topRight,
                         child: IconButton(
-                          icon: const Icon(Icons.favorite_border, color: Colors.green),
-                          onPressed: () {
-                            // Lógica para favoritar (a ser implementada)
-                          },
+                          icon: Icon(
+                            _isFavorite ? Icons.favorite : Icons.favorite_border,
+                            color: Colors.red,
+                          ),
+                          onPressed: _toggleFavorite,
                         ),
                       ),
                       Center(
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: Image.network(
-                            character.image,
+                            widget.character.image,
                             width: 200,
                             height: 200,
                             fit: BoxFit.cover,
@@ -85,7 +97,7 @@ class CharacterDetailScreen extends StatelessWidget {
                       const SizedBox(height: 16),
                       Center(
                         child: Text(
-                          character.name,
+                          widget.character.name,
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -94,11 +106,11 @@ class CharacterDetailScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      _buildInfoRow('Nome', character.name),
-                      _buildInfoRow('Status', character.status),
-                      _buildInfoRow('Espécie', character.species),
-                      _buildInfoRow('Gênero', character.gender),
-                      _buildInfoRow('Localização', character.location),
+                      _buildInfoRow('Nome', widget.character.name),
+                      _buildInfoRow('Status', widget.character.status),
+                      _buildInfoRow('Espécie', widget.character.species),
+                      _buildInfoRow('Gênero', widget.character.gender),
+                      _buildInfoRow('Localização', widget.character.location),
                     ],
                   ),
                 ),
