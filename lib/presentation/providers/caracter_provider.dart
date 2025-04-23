@@ -5,11 +5,11 @@ import '../../data/services/api_service.dart';
 
 final characterRepositoryProvider = Provider((ref) => CharacterRepository(ApiService()));
 
-final characterProvider = StateNotifierProvider<CharacterNotifier, AsyncValue<List<Character>>>((ref) {
+final characterProvider = StateNotifierProvider<CharacterNotifier, AsyncValue<List<CharacterModel>>>((ref) {
   return CharacterNotifier(ref.read(characterRepositoryProvider));
 });
 
-class CharacterNotifier extends StateNotifier<AsyncValue<List<Character>>> {
+class CharacterNotifier extends StateNotifier<AsyncValue<List<CharacterModel>>> {
   final CharacterRepository _repository;
   int _page = 1;
   String? _nameFilter;
@@ -19,6 +19,8 @@ class CharacterNotifier extends StateNotifier<AsyncValue<List<Character>>> {
   CharacterNotifier(this._repository) : super(const AsyncValue.loading()) {
     loadCharacters();
   }
+
+  bool get hasMore => _hasMore;
 
   Future<void> loadCharacters({bool reset = false}) async {
     if (!_hasMore && !reset) return;
