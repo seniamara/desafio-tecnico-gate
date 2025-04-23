@@ -1,4 +1,5 @@
 import 'package:explorer/presentation/screens/carater_list_screen.dart';
+import 'package:explorer/presentation/screens/splashcreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -13,8 +14,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'ExplorerApp',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: const CharacterListScreen(),
+      theme: ThemeData(primarySwatch: Colors.green),
+      debugShowCheckedModeBanner: false,
+      home: const SplashScreen(),
     );
   }
 }
