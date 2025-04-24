@@ -182,4 +182,4 @@ Ou abra uma **Issue** no repositório GitHub.
 
 ---
 
-Desenvolvido por [Seu Nome] para o desafio técnico, abril de 2025.
+Desenvolvido por Seniamara Benedito para o desafio técnico, abril de 2025.
