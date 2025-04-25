@@ -174,7 +174,7 @@ flutter run
 
 ---
 
-## 8. Contato
+## 6. Contato
 
 Para dúvidas ou feedback: seniamraa@gmail.com
 
